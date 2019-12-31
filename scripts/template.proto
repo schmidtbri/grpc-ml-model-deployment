@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package model_grpc_service;
+
+service ModelgRPCService {
+{% for model in models %}
+  rpc {{ model.qualified_name }}_predict ({{ model.qualified_name }}_input) returns ({{ model.qualified_name }}_output) {}
+{% endfor %}
+}
+
+{% for model in models %}
+message {{ model.qualified_name }}_input {
+  {% for field in model.input_schema %}
+  {{ field.type }} {{ field.name }} = {{ field.index }};
+  {% endfor %}
+}
+{% endfor %}
+
+{% for model in models %}
+message {{ model.qualified_name }}_output {
+  {% for field in model.output_schema %}
+  {{ field.type }} {{ field.name }} = {{ field.index }};
+  {% endfor %}
+}
+{% endfor %}

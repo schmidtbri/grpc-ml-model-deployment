@@ -1,25 +1,30 @@
-
 syntax = "proto3";
 
-option java_multiple_files = true;
-option java_package = "io.grpc.examples.helloworld";
-option java_outer_classname = "HelloWorldProto";
-option objc_class_prefix = "HLW";
+package model_grpc_service;
 
-package helloworld;
+service ModelgRPCService {
 
-// The greeting service definition.
-service Greeter {
-  // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply) {}
+  rpc iris_model_predict (iris_model_input) returns (iris_model_output) {}
+
 }
 
-// The request message containing the user's name.
-message HelloRequest {
-  string name = 1;
+
+message iris_model_input {
+  
+  float sepal_length = 1;
+  
+  float sepal_width = 2;
+  
+  float petal_length = 3;
+  
+  float petal_width = 4;
+  
 }
 
-// The response message containing the greetings
-message HelloReply {
-  string message = 1;
+
+
+message iris_model_output {
+  
+  string species = 1;
+  
 }

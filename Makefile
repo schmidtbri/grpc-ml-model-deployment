@@ -64,5 +64,8 @@ check-security:  ## checks for common security vulnerabilities
 check-dependencies:  ## checks for security vulnerabilities in dependencies
 	safety check -r requirements.txt
 
+generate-proto:
+	python scripts/generate_proto.py --output_file=model_service.proto
+
 generate-code:  ## generate the server code from a .proto file
-	python -m grpc_tools.protoc --proto_path=. --python_out=./model_grpc_service --grpc_python_out=./model_grpc_service model_service.proto
+	python -m grpc_tools.protoc --proto_path=. --python_out=. --grpc_python_out=. model_service.proto
