@@ -2,24 +2,32 @@ syntax = "proto3";
 
 package model_grpc_service;
 
+message empty {}
+
+message model {
+    string qualified_name = 1;
+    string display_name = 2;
+    string description = 3;
+    sint32 major_version = 4;
+    sint32 minor_version = 5;
+    string input_type = 6;
+    string output_type = 7;
+}
+
+message model_collection {
+    repeated model models = 1;
+}
+{% for model in models %}
+message {{ model.qualified_name }}_input { {% for field in model.input_schema %}
+    {{ field.type }} {{ field.name }} = {{ field.index }};{% endfor %}
+}
+{% endfor %}
+{% for model in models %}
+message {{ model.qualified_name }}_output { {% for field in model.output_schema %}
+    {{ field.type }} {{ field.name }} = {{ field.index }};{% endfor %}
+}
+{% endfor %}
 service ModelgRPCService {
-{% for model in models %}
-  rpc {{ model.qualified_name }}_predict ({{ model.qualified_name }}_input) returns ({{ model.qualified_name }}_output) {}
-{% endfor %}
+   rpc get_models (empty) returns (model_collection) {}
+{% for model in models %}   rpc {{ model.qualified_name }}_predict ({{ model.qualified_name }}_input) returns ({{ model.qualified_name }}_output) {}{% endfor %}
 }
-
-{% for model in models %}
-message {{ model.qualified_name }}_input {
-  {% for field in model.input_schema %}
-  {{ field.type }} {{ field.name }} = {{ field.index }};
-  {% endfor %}
-}
-{% endfor %}
-
-{% for model in models %}
-message {{ model.qualified_name }}_output {
-  {% for field in model.output_schema %}
-  {{ field.type }} {{ field.name }} = {{ field.index }};
-  {% endfor %}
-}
-{% endfor %}

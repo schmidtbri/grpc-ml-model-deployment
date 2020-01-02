@@ -64,7 +64,7 @@ check-security:  ## checks for common security vulnerabilities
 check-dependencies:  ## checks for security vulnerabilities in dependencies
 	safety check -r requirements.txt
 
-generate-proto:
+generate-proto:  ## generate a .proto file from the models in configuration
 	python scripts/generate_proto.py --output_file=model_service.proto
 
 generate-code:  ## generate the server code from a .proto file

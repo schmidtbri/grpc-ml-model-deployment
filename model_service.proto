@@ -2,29 +2,35 @@ syntax = "proto3";
 
 package model_grpc_service;
 
+message empty {}
+
+message model {
+    string qualified_name = 1;
+    string display_name = 2;
+    string description = 3;
+    sint32 major_version = 4;
+    sint32 minor_version = 5;
+    string input_type = 6;
+    string output_type = 7;
+}
+
+message model_collection {
+    repeated model models = 1;
+}
+
+message iris_model_input { 
+    float sepal_length = 1;
+    float sepal_width = 2;
+    float petal_length = 3;
+    float petal_width = 4;
+}
+
+
+message iris_model_output { 
+    string species = 1;
+}
+
 service ModelgRPCService {
-
-  rpc iris_model_predict (iris_model_input) returns (iris_model_output) {}
-
-}
-
-
-message iris_model_input {
-  
-  float sepal_length = 1;
-  
-  float sepal_width = 2;
-  
-  float petal_length = 3;
-  
-  float petal_width = 4;
-  
-}
-
-
-
-message iris_model_output {
-  
-  string species = 1;
-  
+   rpc get_models (empty) returns (model_collection) {}
+   rpc iris_model_predict (iris_model_input) returns (iris_model_output) {}
 }

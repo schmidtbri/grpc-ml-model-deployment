@@ -1,7 +1,6 @@
 """"""
 import argparse
 import jinja2
-from jinja2 import Template
 
 from model_grpc_service.config import Config
 from model_grpc_service.model_manager import ModelManager
@@ -50,7 +49,7 @@ def main(output_file):
     # rendering the template with the data structure
     output_text = template.render(models=models, type_mappings=type_mappings)
 
-    with open(output_file, "w")  as f:
+    with open(output_file, "w") as f:
         f.write(output_text)
 
 

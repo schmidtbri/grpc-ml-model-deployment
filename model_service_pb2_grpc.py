@@ -14,6 +14,11 @@ class ModelgRPCServiceStub(object):
     Args:
       channel: A grpc.Channel.
     """
+    self.get_models = channel.unary_unary(
+        '/model_grpc_service.ModelgRPCService/get_models',
+        request_serializer=model__service__pb2.empty.SerializeToString,
+        response_deserializer=model__service__pb2.model_collection.FromString,
+        )
     self.iris_model_predict = channel.unary_unary(
         '/model_grpc_service.ModelgRPCService/iris_model_predict',
         request_serializer=model__service__pb2.iris_model_input.SerializeToString,
@@ -25,6 +30,13 @@ class ModelgRPCServiceServicer(object):
   # missing associated documentation comment in .proto file
   pass
 
+  def get_models(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
   def iris_model_predict(self, request, context):
     # missing associated documentation comment in .proto file
     pass
@@ -35,6 +47,11 @@ class ModelgRPCServiceServicer(object):
 
 def add_ModelgRPCServiceServicer_to_server(servicer, server):
   rpc_method_handlers = {
+      'get_models': grpc.unary_unary_rpc_method_handler(
+          servicer.get_models,
+          request_deserializer=model__service__pb2.empty.FromString,
+          response_serializer=model__service__pb2.model_collection.SerializeToString,
+      ),
       'iris_model_predict': grpc.unary_unary_rpc_method_handler(
           servicer.iris_model_predict,
           request_deserializer=model__service__pb2.iris_model_input.FromString,
