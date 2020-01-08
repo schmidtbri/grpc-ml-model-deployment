@@ -18,6 +18,7 @@ message model_collection {
     repeated model models = 1;
 }
 
+
 message iris_model_input { 
     float sepal_length = 1;
     float sepal_width = 2;
@@ -30,7 +31,10 @@ message iris_model_output {
     string species = 1;
 }
 
+
 service ModelgRPCService {
-   rpc get_models (empty) returns (model_collection) {}
-   rpc iris_model_predict (iris_model_input) returns (iris_model_output) {}
+    rpc get_models (empty) returns (model_collection) {}
+    
+    rpc iris_model_predict (iris_model_input) returns (iris_model_output) {}
+    
 }

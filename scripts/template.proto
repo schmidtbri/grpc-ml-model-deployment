@@ -17,6 +17,7 @@ message model {
 message model_collection {
     repeated model models = 1;
 }
+
 {% for model in models %}
 message {{ model.qualified_name }}_input { {% for field in model.input_schema %}
     {{ field.type }} {{ field.name }} = {{ field.index }};{% endfor %}
@@ -27,7 +28,10 @@ message {{ model.qualified_name }}_output { {% for field in model.output_schema 
     {{ field.type }} {{ field.name }} = {{ field.index }};{% endfor %}
 }
 {% endfor %}
+
 service ModelgRPCService {
-   rpc get_models (empty) returns (model_collection) {}
-{% for model in models %}   rpc {{ model.qualified_name }}_predict ({{ model.qualified_name }}_input) returns ({{ model.qualified_name }}_output) {}{% endfor %}
+    rpc get_models (empty) returns (model_collection) {}
+    {% for model in models %}
+    rpc {{ model.qualified_name }}_predict ({{ model.qualified_name }}_input) returns ({{ model.qualified_name }}_output) {}
+    {% endfor %}
 }

@@ -1,18 +1,25 @@
 """gRPC service that hosts MLModel classes."""
-from model_service_pb2 import iris_model_input, iris_model_output, model, model_collection
+from model_service_pb2 import model, model_collection, iris_model_output
 from model_service_pb2_grpc import ModelgRPCServiceStub
 from nameko_grpc.entrypoint import Grpc
+from google.protobuf.json_format import MessageToDict
 
 from model_grpc_service.config import Config
-from model_grpc_service.extensions import ModelManagerProvider, setup
+from model_grpc_service.extensions import ModelManagerProvider
+from model_grpc_service.extensions import startup
 
 grpc = Grpc.implementing(ModelgRPCServiceStub)
 
 
 class GRPCService:
-    name = "http_service"
+    name = "Model gRPC Service"
 
     model_manager = ModelManagerProvider(configuration=Config.models)
+
+    @startup
+    def register_endpoints(self):
+        print("test")
+        return
 
     @grpc
     def get_models(self, request, context):
@@ -34,9 +41,16 @@ class GRPCService:
 
     @grpc
     def iris_model_predict(self, request, context):
+        """Predict with the iris_model package."""
+        # getting a reference to the model from the ModelManager singleton
         model = self.model_manager.get_model(qualified_name="iris_model")
-        prediction = model.predict({"sepal_width": request.sepal_width,
-                                    "sepal_length": request.sepal_length,
-                                    "petal_length": request.petal_length,
-                                    "petal_width": request.petal_width})
-        return iris_model_output(species=prediction["species"])
+
+        # converting the protocol buffer into a dictionary
+        data = MessageToDict(request, preserving_proto_field_name=True)
+
+        # making a prediction with the model
+        prediction = model.predict(data=data)
+
+        # creating the response protocol buffer
+        response = iris_model_output(**prediction)
+        return response

@@ -47,7 +47,7 @@ def main(output_file):
         )
 
     # rendering the template with the data structure
-    output_text = template.render(models=models, type_mappings=type_mappings)
+    output_text = template.render(models=models)
 
     with open(output_file, "w") as f:
         f.write(output_text)
