@@ -12,17 +12,21 @@ grpc = Grpc.implementing(ModelgRPCServiceStub)
 
 
 class GRPCService:
+    """Service used to host MLModel implementations."""
+
     name = "Model gRPC Service"
 
     model_manager = ModelManagerProvider(configuration=Config.models)
 
     @startup
     def register_endpoints(self):
+        """Create an endpoint for each model at startup."""
         print("test")
         return
 
     @grpc
     def get_models(self, request, context):
+        """Return list of models hosted in this service."""
         model_data = self.model_manager.get_models()
         models = []
         for m in model_data:
