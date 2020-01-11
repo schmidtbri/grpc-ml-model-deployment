@@ -15,6 +15,7 @@ class ModelgRPCServiceServicer(model_service_pb2_grpc.ModelgRPCServiceServicer):
     """Provides methods that implement functionality of Model gRPC Service."""
 
     def __init__(self):
+        """Initialize an instance of the service."""
         self.model_manager = ModelManager()
         self.model_manager.load_models(configuration=Config.models)
 
@@ -45,6 +46,7 @@ class ModelgRPCServiceServicer(model_service_pb2_grpc.ModelgRPCServiceServicer):
 
 
 def serve():
+    """Start the model service."""
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     model_service_pb2_grpc.add_ModelgRPCServiceServicer_to_server(ModelgRPCServiceServicer(), server)
     server.add_insecure_port('[::]:50051')
@@ -55,6 +57,3 @@ def serve():
 if __name__ == '__main__':
     logging.basicConfig()
     serve()
-
-
-
