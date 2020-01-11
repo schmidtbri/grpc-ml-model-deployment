@@ -1,4 +1,4 @@
-"""Class to host an MlModel object."""
+"""Class to host an MlModel object in a gRPC endpoint."""
 import logging
 from google.protobuf.json_format import MessageToDict
 
@@ -29,8 +29,8 @@ class MLModelgRPCEndpoint(object):
         if self._model is None:
             raise ValueError("'{}' not found in ModelManager instance.".format(model_qualified_name))
 
-    def process(self, request, context):
-        """Make predictions on protocol buffers."""
+    def __call__(self, request, context):
+        """Make predictions with protocol buffers."""
         # converting the protocol buffer into a dictionary
         # if the input protobuf is mapped to a type that the model cannot accept, this will cause a schema exception
         data = MessageToDict(request, preserving_proto_field_name=True)
@@ -38,9 +38,10 @@ class MLModelgRPCEndpoint(object):
         # making a prediction with the model
         prediction = self._model.predict(data=data)
 
-        # getting the protobuf for this model
-        # this code relies on the fact that a model's output protobufs are always named the same way
-        output_protobuf = MLModelgRPCEndpoint._get_protobuf("{}_output".format(self._model.qualified_name))
+        # getting the output protobuf for the model, this code relies on the fact that a model's output protobufs are
+        # always named the same way
+        output_protobuf_name = "{}_output".format(self._model.qualified_name)
+        output_protobuf = MLModelgRPCEndpoint._get_protobuf(output_protobuf_name)
 
         # creating the response protocol buffer
         # if the model outputs a data structure that cannot be mapped to the protobuf, this code will fail
@@ -50,4 +51,5 @@ class MLModelgRPCEndpoint(object):
 
     @staticmethod
     def _get_protobuf(protobuf_name):
+        print("getting protobuf")
         return model_service_pb2.__getattribute__(protobuf_name)

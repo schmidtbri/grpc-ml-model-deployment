@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='model_grpc_service',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x13model_service.proto\x12\x12model_grpc_service\"\x07\n\x05\x65mpty\"\xa1\x01\n\x05model\x12\x16\n\x0equalified_name\x18\x01 \x01(\t\x12\x14\n\x0c\x64isplay_name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\x15\n\rmajor_version\x18\x04 \x01(\x11\x12\x15\n\rminor_version\x18\x05 \x01(\x11\x12\x12\n\ninput_type\x18\x06 \x01(\t\x12\x13\n\x0boutput_type\x18\x07 \x01(\t\"=\n\x10model_collection\x12)\n\x06models\x18\x01 \x03(\x0b\x32\x19.model_grpc_service.model\"h\n\x10iris_model_input\x12\x14\n\x0csepal_length\x18\x01 \x01(\x02\x12\x13\n\x0bsepal_width\x18\x02 \x01(\x02\x12\x14\n\x0cpetal_length\x18\x03 \x01(\x02\x12\x13\n\x0bpetal_width\x18\x04 \x01(\x02\"$\n\x11iris_model_output\x12\x0f\n\x07species\x18\x01 \x01(\t2\xc8\x01\n\x10ModelgRPCService\x12O\n\nget_models\x12\x19.model_grpc_service.empty\x1a$.model_grpc_service.model_collection\"\x00\x12\x63\n\x12iris_model_predict\x12$.model_grpc_service.iris_model_input\x1a%.model_grpc_service.iris_model_output\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x13model_service.proto\x12\x12model_grpc_service\"\x07\n\x05\x65mpty\"\xbc\x01\n\x05model\x12\x16\n\x0equalified_name\x18\x01 \x01(\t\x12\x14\n\x0c\x64isplay_name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\x12\x15\n\rmajor_version\x18\x04 \x01(\x11\x12\x15\n\rminor_version\x18\x05 \x01(\x11\x12\x12\n\ninput_type\x18\x06 \x01(\t\x12\x13\n\x0boutput_type\x18\x07 \x01(\t\x12\x19\n\x11predict_operation\x18\x08 \x01(\t\"=\n\x10model_collection\x12)\n\x06models\x18\x01 \x03(\x0b\x32\x19.model_grpc_service.model\"h\n\x10iris_model_input\x12\x14\n\x0csepal_length\x18\x01 \x01(\x02\x12\x13\n\x0bsepal_width\x18\x02 \x01(\x02\x12\x14\n\x0cpetal_length\x18\x03 \x01(\x02\x12\x13\n\x0bpetal_width\x18\x04 \x01(\x02\"$\n\x11iris_model_output\x12\x0f\n\x07species\x18\x01 \x01(\t2\xc8\x01\n\x10ModelgRPCService\x12O\n\nget_models\x12\x19.model_grpc_service.empty\x1a$.model_grpc_service.model_collection\"\x00\x12\x63\n\x12iris_model_predict\x12$.model_grpc_service.iris_model_input\x1a%.model_grpc_service.iris_model_output\"\x00\x62\x06proto3')
 )
 
 
@@ -106,6 +106,13 @@ _MODEL = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='predict_operation', full_name='model_grpc_service.model.predict_operation', index=7,
+      number=8, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -119,7 +126,7 @@ _MODEL = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=53,
-  serialized_end=214,
+  serialized_end=241,
 )
 
 
@@ -149,8 +156,8 @@ _MODEL_COLLECTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=216,
-  serialized_end=277,
+  serialized_start=243,
+  serialized_end=304,
 )
 
 
@@ -201,8 +208,8 @@ _IRIS_MODEL_INPUT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=279,
-  serialized_end=383,
+  serialized_start=306,
+  serialized_end=410,
 )
 
 
@@ -232,8 +239,8 @@ _IRIS_MODEL_OUTPUT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=385,
-  serialized_end=421,
+  serialized_start=412,
+  serialized_end=448,
 )
 
 _MODEL_COLLECTION.fields_by_name['models'].message_type = _MODEL
@@ -287,8 +294,8 @@ _MODELGRPCSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=424,
-  serialized_end=624,
+  serialized_start=451,
+  serialized_end=651,
   methods=[
   _descriptor.MethodDescriptor(
     name='get_models',

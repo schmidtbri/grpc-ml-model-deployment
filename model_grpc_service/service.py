@@ -1,30 +1,28 @@
 """gRPC service that hosts MLModel classes."""
-from model_service_pb2 import model, model_collection, iris_model_output
-from model_service_pb2_grpc import ModelgRPCServiceStub
-from nameko_grpc.entrypoint import Grpc
-from google.protobuf.json_format import MessageToDict
+from concurrent import futures
+import logging
+import grpc
+
+from model_service_pb2 import model, model_collection
+import model_service_pb2_grpc
 
 from model_grpc_service.config import Config
-from model_grpc_service.extensions import ModelManagerProvider
-from model_grpc_service.extensions import startup
-
-grpc = Grpc.implementing(ModelgRPCServiceStub)
+from model_grpc_service.model_manager import ModelManager
+from model_grpc_service.ml_model_grpc_endpoint import MLModelgRPCEndpoint
 
 
-class GRPCService:
-    """Service used to host MLModel implementations."""
+class ModelgRPCServiceServicer(model_service_pb2_grpc.ModelgRPCServiceServicer):
+    """Provides methods that implement functionality of Model gRPC Service."""
 
-    name = "Model gRPC Service"
+    def __init__(self):
+        self.model_manager = ModelManager()
+        self.model_manager.load_models(configuration=Config.models)
 
-    model_manager = ModelManagerProvider(configuration=Config.models)
+        for model in self.model_manager.get_models():
+            endpoint = MLModelgRPCEndpoint(model_qualified_name=model["qualified_name"])
+            operation_name = "{}_predict".format(model["qualified_name"])
+            setattr(self, operation_name, endpoint)
 
-    @startup
-    def register_endpoints(self):
-        """Create an endpoint for each model at startup."""
-        print("test")
-        return
-
-    @grpc
     def get_models(self, request, context):
         """Return list of models hosted in this service."""
         model_data = self.model_manager.get_models()
@@ -36,25 +34,27 @@ class GRPCService:
                                    major_version=m["major_version"],
                                    minor_version=m["minor_version"],
                                    input_type="{}_input".format(m["qualified_name"]),
-                                   output_type="{}_output".format(m["qualified_name"]))
+                                   output_type="{}_output".format(m["qualified_name"]),
+                                   predict_operation="{}_predict".format(m["qualified_name"]))
             models.append(response_model)
 
+        # creating the response protobuf
         response_models = model_collection()
         response_models.models.extend(models)
         return response_models
 
-    @grpc
-    def iris_model_predict(self, request, context):
-        """Predict with the iris_model package."""
-        # getting a reference to the model from the ModelManager singleton
-        model = self.model_manager.get_model(qualified_name="iris_model")
 
-        # converting the protocol buffer into a dictionary
-        data = MessageToDict(request, preserving_proto_field_name=True)
+def serve():
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    model_service_pb2_grpc.add_ModelgRPCServiceServicer_to_server(ModelgRPCServiceServicer(), server)
+    server.add_insecure_port('[::]:50051')
+    server.start()
+    server.wait_for_termination()
 
-        # making a prediction with the model
-        prediction = model.predict(data=data)
 
-        # creating the response protocol buffer
-        response = iris_model_output(**prediction)
-        return response
+if __name__ == '__main__':
+    logging.basicConfig()
+    serve()
+
+
+
