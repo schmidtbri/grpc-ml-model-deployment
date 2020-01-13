@@ -48,6 +48,17 @@ make test
 ```
 
 ## Running the Service
+To start the service execute these commands:
+```bash
+export PYTHONPATH=./
+export APP_SETTINGS=ProdConfig 
+python model_grpc_service/service.py
+```
 
 ## Testing the Service
-
+To test the service once it is running, execute these commands:
+```bash
+export PYTHONPATH=./
+python scripts/client.py --get_models
+python scripts/client.py --iris_model_predict
+```

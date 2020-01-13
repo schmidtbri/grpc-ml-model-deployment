@@ -20,9 +20,9 @@ type_mappings = {
 
 
 def main(output_file):
-    template_loader = jinja2.FileSystemLoader(searchpath="./scripts")
+    template_loader = jinja2.FileSystemLoader(searchpath="./")
     template_env = jinja2.Environment(loader=template_loader)
-    template = template_env.get_template("template.proto")
+    template = template_env.get_template("model_service_template.proto")
 
     # building a data structure to feed to the template from the models in ModelManager
     models = []

@@ -67,5 +67,5 @@ check-dependencies:  ## checks for security vulnerabilities in dependencies
 generate-proto:  ## generate a .proto file from the models in configuration
 	python scripts/generate_proto.py --output_file=model_service.proto
 
-generate-code:  ## generate the server code from a .proto file
+generate-code:  ## generate python code from a .proto file
 	python -m grpc_tools.protoc --proto_path=. --python_out=. --grpc_python_out=. model_service.proto

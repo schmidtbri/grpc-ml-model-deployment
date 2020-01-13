@@ -16,7 +16,7 @@ class MLModelgRPCEndpoint(object):
         """Create a gRPC endpoint for a model.
 
         :param model_qualified_name: The qualified name of the model that will be hosted in this endpoint.
-        :type model: str
+        :type model_qualified_name: str
         :returns: An instance of MLModelStreamProcessor.
         :rtype: MLModelStreamProcessor
 
@@ -51,5 +51,4 @@ class MLModelgRPCEndpoint(object):
 
     @staticmethod
     def _get_protobuf(protobuf_name):
-        print("getting protobuf")
-        return model_service_pb2.__getattribute__(protobuf_name)
+        return getattr(model_service_pb2, protobuf_name)

@@ -1,6 +1,8 @@
 """gRPC service that hosts MLModel classes."""
-from concurrent import futures
+import os
 import logging
+import time
+from concurrent import futures
 import grpc
 
 from model_service_pb2 import model, model_collection
@@ -9,6 +11,10 @@ import model_service_pb2_grpc
 from model_grpc_service.config import Config
 from model_grpc_service.model_manager import ModelManager
 from model_grpc_service.ml_model_grpc_endpoint import MLModelgRPCEndpoint
+
+logging.basicConfig(level=logging.INFO)
+
+_ONE_DAY_IN_SECONDS = 60 * 60 * 24
 
 
 class ModelgRPCServiceServicer(model_service_pb2_grpc.ModelgRPCServiceServicer):
@@ -29,6 +35,7 @@ class ModelgRPCServiceServicer(model_service_pb2_grpc.ModelgRPCServiceServicer):
         model_data = self.model_manager.get_models()
         models = []
         for m in model_data:
+            # creating a list of model protobufs from the model information returned by the model manager
             response_model = model(qualified_name=m["qualified_name"],
                                    display_name=m["display_name"],
                                    description=m["description"],
@@ -39,7 +46,7 @@ class ModelgRPCServiceServicer(model_service_pb2_grpc.ModelgRPCServiceServicer):
                                    predict_operation="{}_predict".format(m["qualified_name"]))
             models.append(response_model)
 
-        # creating the response protobuf
+        # creating the response protobuf from the list created above
         response_models = model_collection()
         response_models.models.extend(models)
         return response_models
@@ -47,13 +54,21 @@ class ModelgRPCServiceServicer(model_service_pb2_grpc.ModelgRPCServiceServicer):
 
 def serve():
     """Start the model service."""
+    # importing the right configuration
+    configuration = __import__("model_grpc_service"). \
+        __getattribute__("config"). \
+        __getattribute__(os.environ["APP_SETTINGS"])
+
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     model_service_pb2_grpc.add_ModelgRPCServiceServicer_to_server(ModelgRPCServiceServicer(), server)
-    server.add_insecure_port('[::]:50051')
+    server.add_insecure_port(configuration.service_port)
     server.start()
-    server.wait_for_termination()
+    try:
+        while True:
+            time.sleep(_ONE_DAY_IN_SECONDS)
+    except KeyboardInterrupt:
+        server.stop(0)
 
 
 if __name__ == '__main__':
-    logging.basicConfig()
     serve()
