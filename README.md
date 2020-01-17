@@ -62,3 +62,19 @@ export PYTHONPATH=./
 python scripts/client.py --get_models
 python scripts/client.py --iris_model_predict
 ```
+
+### Docker
+To build a docker image for the service, run this command:
+```bash
+docker build -t model-grpc-service:latest .
+```
+
+To run the image, execute this command:
+```bash
+docker run -d -p 50051:50051 --env APP_SETTINGS=ProdConfig model-grpc-service
+```
+
+To watch the logs coming from the image, execute this command:
+```bash
+docker logs $(docker ps -lq)
+```
