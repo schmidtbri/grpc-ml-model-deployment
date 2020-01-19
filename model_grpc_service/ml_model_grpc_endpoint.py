@@ -24,10 +24,10 @@ class MLModelgRPCEndpoint(object):
         model_manager = ModelManager()
         self._model = model_manager.get_model(model_qualified_name)
 
-        logger.info("Initializing endpoint for model: {}".format(self._model.qualified_name))
-
         if self._model is None:
             raise ValueError("'{}' not found in ModelManager instance.".format(model_qualified_name))
+
+        logger.info("Initializing endpoint for model: {}".format(self._model.qualified_name))
 
     def __call__(self, request, context):
         """Make predictions with protocol buffers."""
