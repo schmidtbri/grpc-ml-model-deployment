@@ -638,4 +638,4 @@ and protocol buffers only supports simple data structures. Another way
 to improve the service is to add support for streaming endpoints for
 each model. Lastly, protocol buffers have a mechanism for evolving
 message schemas, the code could be improved by safely evolving the shema
-of the service through this mechanism when the model schema changes.
+of the service through this mechanism when the model schema changes. 
