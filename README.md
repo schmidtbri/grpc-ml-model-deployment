@@ -5,7 +5,7 @@ Deploying an ML model in a gRPC service.
 
 Deploying an ML model in a gRPC service.
 
-This code is used in this [blog post]().
+This code is used in this [blog post](https://medium.com/@brianschmidt_78145/a-grpc-ml-model-deployment-d9265c2f7293).
 
 ## Requirements
 Docker
