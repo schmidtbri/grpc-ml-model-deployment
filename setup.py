@@ -25,6 +25,6 @@ setup(
     install_requires=["iris-model@git+https://github.com/schmidtbri/ml-model-abc-improvements#egg=iris_model@master",
                       "grpcio==1.26.0",
                       "grpcio-tools==1.26.0",
-                      "Jinja2==2.10.3"],
+                      "Jinja2==2.11.3"],
     tests_require=['pytest', 'pytest-html', 'pylama', 'coverage', 'coverage-badge', 'bandit', 'safety']
 )
