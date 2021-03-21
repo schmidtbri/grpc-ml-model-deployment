@@ -2,7 +2,7 @@ contextlib2==0.5.5
 grpcio==1.26.0
 grpcio-tools==1.26.0
 git+https://github.com/schmidtbri/ml-model-abc-improvements#egg=iris_model
-Jinja2==2.10.3
+Jinja2==2.11.3
 joblib==0.14.1
 MarkupSafe==1.1.1
 numpy==1.18.1
