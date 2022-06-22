@@ -5,7 +5,7 @@ git+https://github.com/schmidtbri/ml-model-abc-improvements#egg=iris_model
 Jinja2==2.11.3
 joblib==0.14.1
 MarkupSafe==1.1.1
-numpy==1.18.1
+numpy==1.22.0
 protobuf==3.11.2
 schema==0.7.0
 scikit-learn==0.21.0
