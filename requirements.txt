@@ -6,7 +6,7 @@ Jinja2==2.11.3
 joblib==0.14.1
 MarkupSafe==1.1.1
 numpy==1.18.1
-protobuf==3.11.2
+protobuf==3.18.3
 schema==0.7.0
 scikit-learn==0.21.0
 scipy==1.4.1
