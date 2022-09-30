@@ -3,7 +3,7 @@ grpcio==1.26.0
 grpcio-tools==1.26.0
 git+https://github.com/schmidtbri/ml-model-abc-improvements#egg=iris_model
 Jinja2==2.11.3
-joblib==0.14.1
+joblib==1.2.0
 MarkupSafe==1.1.1
 numpy==1.18.1
 protobuf==3.11.2
